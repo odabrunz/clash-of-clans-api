@@ -1,4 +1,4 @@
-import request from 'request-promise';
+import request from 'request-promise-any';
 import config from '../config';
 import { merge } from 'lodash';
 

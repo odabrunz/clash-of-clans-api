@@ -34,6 +34,6 @@
     "chokidar": "^3.0.1",
     "lodash": "^4.17.15",
     "request": "^2.81.0",
-    "request-promise": "^4.2.1"
+    "request-promise-any": "^1.0.4"
   }
 }

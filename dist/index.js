@@ -2,9 +2,9 @@
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _requestPromise = require('request-promise');
+var _requestPromiseAny = require('request-promise-any');
 
-var _requestPromise2 = _interopRequireDefault(_requestPromise);
+var _requestPromiseAny2 = _interopRequireDefault(_requestPromiseAny);
 
 var _config = require('../config');
 
@@ -26,13 +26,14 @@ var ClashApi = function () {
   function ClashApi() {
     var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
         uri = _ref.uri,
-        token = _ref.token;
+        token = _ref.token,
+        request = _ref.request;
 
     _classCallCheck(this, ClashApi);
 
     this.token = token || env.COC_API_TOKEN;
     this.uri = uri || _config2.default.uri;
-
+    this.requestDefaults = request || {};
     if (!this.token) {
       throw new Error('Must define a token option or COC_API_TOKEN env variable');
     }
@@ -41,39 +42,39 @@ var ClashApi = function () {
   _createClass(ClashApi, [{
     key: 'requestOptions',
     value: function requestOptions(opts) {
-      return (0, _lodash.assign)(opts, {
+      return (0, _lodash.merge)({
         headers: {
           Accept: 'application/json',
           authorization: 'Bearer ' + this.token
         },
         json: true
-      });
+      }, opts, this.requestDefaults);
     }
   }, {
     key: 'clanByTag',
     value: function clanByTag(tag) {
-      return (0, _requestPromise2.default)(this.requestOptions({
+      return (0, _requestPromiseAny2.default)(this.requestOptions({
         uri: this.uri + '/clans/' + encodeURIComponent(tag)
       }));
     }
   }, {
     key: 'clanMembersByTag',
     value: function clanMembersByTag(tag) {
-      return (0, _requestPromise2.default)(this.requestOptions({
+      return (0, _requestPromiseAny2.default)(this.requestOptions({
         uri: this.uri + '/clans/' + encodeURIComponent(tag) + '/members'
       }));
     }
   }, {
     key: 'clanWarlogByTag',
     value: function clanWarlogByTag(tag) {
-      return (0, _requestPromise2.default)(this.requestOptions({
+      return (0, _requestPromiseAny2.default)(this.requestOptions({
         uri: this.uri + '/clans/' + encodeURIComponent(tag) + '/warlog'
       }));
     }
   }, {
     key: 'clanCurrentWarByTag',
     value: function clanCurrentWarByTag(tag) {
-      return (0, _requestPromise2.default)(this.requestOptions({
+      return (0, _requestPromiseAny2.default)(this.requestOptions({
         uri: this.uri + '/clans/' + encodeURIComponent(tag) + '/currentwar'
       }));
     }
@@ -90,7 +91,7 @@ var ClashApi = function () {
         return builder;
       }, {
         fetch: function () {
-          return (0, _requestPromise2.default)(this.requestOptions({
+          return (0, _requestPromiseAny2.default)(this.requestOptions({
             qs: qs,
             uri: this.uri + '/clans'
           }));
@@ -104,7 +105,7 @@ var ClashApi = function () {
     value: function locations() {
       var dsl = {
         fetch: function () {
-          return (0, _requestPromise2.default)(this.requestOptions({
+          return (0, _requestPromiseAny2.default)(this.requestOptions({
             uri: this.uri + '/locations'
           }));
         }.bind(this),
@@ -122,17 +123,17 @@ var ClashApi = function () {
             }
           };
 
-          var rankingDsl = (0, _lodash.assign)({
+          var rankingDsl = assign({
             fetch: function () {
-              return (0, _requestPromise2.default)(this.requestOptions({
+              return (0, _requestPromiseAny2.default)(this.requestOptions({
                 uri: this.uri + '/locations/' + encodeURIComponent(locId) + '/rankings/' + rankId
               }));
             }.bind(this)
           }, rankingDslMembers);
 
-          var locDsl = (0, _lodash.assign)({
+          var locDsl = assign({
             fetch: function fetch() {
-              return (0, _requestPromise2.default)(this.requestOptions({
+              return (0, _requestPromiseAny2.default)(this.requestOptions({
                 uri: this.uri + '/locations/' + encodeURIComponent(locId)
               }));
             }
@@ -146,14 +147,14 @@ var ClashApi = function () {
   }, {
     key: 'leagues',
     value: function leagues() {
-      return (0, _requestPromise2.default)(this.requestOptions({
+      return (0, _requestPromiseAny2.default)(this.requestOptions({
         uri: this.uri + '/leagues'
       }));
     }
   }, {
     key: 'playerByTag',
     value: function playerByTag(tag) {
-      return (0, _requestPromise2.default)(this.requestOptions({
+      return (0, _requestPromiseAny2.default)(this.requestOptions({
         uri: this.uri + '/players/' + encodeURIComponent(tag)
       }));
     }
